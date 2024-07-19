@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        #chat-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 80%;
+            height: 80%;
+            background: white;
+            border: 1px solid #ddd;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        #messages {
+            flex-grow: 1;
+            overflow-y: scroll;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+            padding: 10px;
+        }
+        .message {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        #input-container {
+            display: flex;
+        }
+        #input-container input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px 0 0 5px;
+        }
+        #input-container button {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-left: 0;
+            border-radius: 0 5px 5px 0;
+            background-color: #5cb85c;
+            color: white;
+            cursor: pointer;
+        }
+        #input-container button:hover {
+            background-color: #4cae4c;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <div id="messages"></div>
+        <div id="input-container">
+            <input type="text" id="message-input" placeholder="Type your message here...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        // Load messages from localStorage
+        function loadMessages() {
+            const messages = JSON.parse(localStorage.getItem('messages')) || [];
+            const messagesContainer = document.getElementById('messages');
+            messagesContainer.innerHTML = '';
+            messages.forEach(msg => {
+                const message = document.createElement('div');
+                message.classList.add('message');
+                message.textContent = msg;
+                messagesContainer.appendChild(message);
+            });
+        }
+
+        // Send a new message
+        function sendMessage() {
+            const input = document.getElementById('message-input');
+            const text = input.value;
+            if (text.trim()) {
+                const messages = JSON.parse(localStorage.getItem('messages')) || [];
+                messages.push(text);
+                localStorage.setItem('messages', JSON.stringify(messages));
+                input.value = '';
+                loadMessages();
+            }
+        }
+
+        // Initial load
+        window.onload = loadMessages;
+    </script>
+</body>
+</html>
